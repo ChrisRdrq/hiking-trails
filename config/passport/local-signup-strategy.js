@@ -29,6 +29,7 @@ var strategy = new LocalStrategy({
         return newUser.save()
         .then(function(saved) {
           console.log(saved);
+          console.log('saved!!!');
           return callback(null, saved);
         });
       }

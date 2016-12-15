@@ -6,6 +6,7 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var passport = require("passport");
 var LocalStrategy = require('passport-local');
+var flash = require('connect-flash');
 var passportLocalMongoose = ('passport-local-mongoose');
 
 
@@ -52,6 +53,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(flash());
 
 require('./config/passport/passport')(passport);
 
@@ -60,13 +62,9 @@ require('./config/passport/passport')(passport);
 // passport.deserializeUser(User.deserializeUser());
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
-app.get('/secret', isLoggedIn, function(res, req) {
-    res.render('secret');
-});
 
 // Routes
 app.use('/', homeRouter);
-
 app.use('/users', userRouter);
 // app.post('/register', function(req, res) {
 // var newUser = new User({
@@ -96,17 +94,12 @@ app.use('/users', userRouter);
 //     failureRedirect: '/login'
 // }), function(req, res) {});
 
-app.get('/logout', function(req, res) {
-    req.logout();
-    res.redirect('/');
-});
+// app.get('/logout', function(req, res) {
+//     req.logout();
+//     res.redirect('/');
+// });
 
-function isLoggedIn(req, res, next) {
-    if (req.isAuthenticated()) {
-        return next();
-    }
-    res.redirect('/login');
-}
+
 
 
 
@@ -124,14 +117,26 @@ app.use(function(err,req, res, next) {
     next(err);
 });
 // error handler
-app.use(function(err, req, res, next) {
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
-  // render the error page
-  res.status(err.status || 500);
-  res.render('error');
-});
+// app.use(function(err, req, res, next) {
+//   // set locals, only providing error in development
+//   res.locals.message = err.message;
+//   res.locals.error = req.app.get('env') === 'development' ? err : {};
+//   // render the error page
+//   res.status(err.status || 500);
+//   res.render('error');
+// });
+// development error handler
+// will print stacktrace
+if (app.get('env') === 'development') {
+ app.use(function(err, req, res, next) {
+   res.status(err.status || 500);
+   res.render('error', {
+     message: err.message + ' ',
+     error: err
+   });
+ });
+}
+
 
 app.listen(process.env.PORT , 3000 );
 

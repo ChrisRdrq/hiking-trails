@@ -2,6 +2,14 @@ var express = require('express');
 var router = express.Router();
 var passport = require('passport');
 
+function isLoggedIn(req, res, next) {
+    if (req.isAuthenticated()) {
+        return next();
+    }
+    res.redirect('/login');
+}
+
+
 /* GET home page. */
 router.get('/', function(req, res, next) {
   res.render('index', { title: "What's the best hiking trail?" });
@@ -42,11 +50,27 @@ router.get('/login', function(req, res) {
 router.post('/login', function(req, res, next) {
   var loginProperty = passport.authenticate('local-login', {
     successRedirect : '/secret',
-    failureRedirect : '/login',
-    failureFlash : true
+    failureRedirect : '/login'
+    // failureFlash : true
   });
   return loginProperty(req, res, next);
 });
+
+// router.get('/secret', isLoggedIn, function(res, req) {
+//     res.render('secret');
+// });
+// Restricted page
+router.get('/secret', function(req, res, next) {
+  res.render('secret');
+ // if (currentUser) {
+ //   res.render('secret.ejs');
+ // }
+ // else {
+ //   res.redirect('/');
+ // }
+});
+
+
 
 // GET /logout
 router.get('/logout', function(req, res, next) {
