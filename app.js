@@ -7,13 +7,20 @@ var bodyParser = require('body-parser');
 var passport = require("passport");
 var LocalStrategy = require('passport-local');
 var passportLocalMongoose = ('passport-local-mongoose');
-var index = require('./routes/index');
-var users = require('./routes/users');
-var trails = require('./models/trail')
+
+
+var trails = require('./models/trail');
 var mongoose = require('mongoose');
-var User = require('./models/user')
+var User = require('./models/user');
+var session =require('express-session')
     // var trailsRouter = require('./routes/trails');
 var methodOverride = require('method-override');
+
+
+// Routes
+var homeRouter = require('./routes/index');
+var userRouter = require('./routes/users');
+
 
 var app = express();
 
@@ -22,76 +29,77 @@ var app = express();
 app.set('views', path.join(__dirname, 'views'));
 
 app.set('view engine', 'ejs');
+
+app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
     extended: true
 }));
 
-app.get("/", function(req, res) {
-    res.render("home");
-});
+// app.get("/", function(req, res) {
+//     res.render('index');
+// });
 
 mongoose.connect('mongodb://localhost/trails');
 
 app.use(require("express-session")({
     secret: "Dogs are funny creatures",
     resave: false,
-    saveUninitailized: false
+    saveUninitialized: false
 }));
 
-
+app.use(methodOverride('_method'));
 app.use(passport.initialize());
 app.use(passport.session());
-passport.use(new LocalStrategy(User.authenticate()));
-passport.serializeUser(User.serializeUser());
-passport.deserializeUser(User.deserializeUser());
+app.use(cookieParser());
+app.use(express.static(path.join(__dirname, 'public')));
+
+require('./config/passport/passport')(passport);
+
+// passport.use(new LocalStrategy(User.authenticate()));
+// passport.serializeUser(User.serializeUser());
+// passport.deserializeUser(User.deserializeUser());
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.get('/secret', isLoggedIn, function(res, req) {
     res.render('secret');
 });
 
+// Routes
+app.use('/', homeRouter);
 
-app.get('/register', function(req, res) {
-    res.render('register');
-});
+app.use('/users', userRouter);
+// app.post('/register', function(req, res) {
+// var newUser = new User({
+//     username: req.body.username
+//   });
+// });
 
-app.post('/register', function(req, res) {
-var newUser = new User({
-    username: req.body.username
-  });
-});
-
-app.post('/register',function(req, res){
-    req.body.username
-    req.body.password
-    User.register(new User({username: req.body.username}), req.body.password, function(err, user){
-        if(err){
-          return res.render('register');
-        }
-        passport.authenticate('local')(req, res, function(){
-          res.redirect('/secret');
-        });
-    });
-});
-//Login Routes
-app.get('/login', function(req, res) {
-    res.render('login');
-});
-//middleware
-app.post('login', passport.authenticate('local', {
-    successRedirect: '/secret',
-    failureRedirect: '/login'
-}), function(req, res) {});
+// app.post('/register',function(req, res){
+//     req.body.username
+//     req.body.password
+//     User.register(new User({username: req.body.username}), req.body.password, function(err, user){
+//         if(err){
+//           return res.render('register');
+//         }
+//         passport.authenticate('local')(req, res, function(){
+//           res.redirect('/secret');
+//         });
+//     });
+// });
+// //Login Routes
+// app.get('/login', function(req, res) {
+//     res.render('login');
+// });
+// //middleware
+// app.post('login', passport.authenticate('local', {
+//     successRedirect: '/secret',
+//     failureRedirect: '/login'
+// }), function(req, res) {});
 
 app.get('/logout', function(req, res) {
     req.logout();
     res.redirect('/');
 });
-
-
-
-
-
 
 function isLoggedIn(req, res, next) {
     if (req.isAuthenticated()) {
@@ -100,17 +108,13 @@ function isLoggedIn(req, res, next) {
     res.redirect('/login');
 }
 
-app.listen(process.env.PORT, process.env.IP, function() {});
 
-// app.use(logger('dev'));
-app.use(bodyParser.json());
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', index);
-app.use('/users', users);
 
-app.use(methodOverride('_method'));
+// app.use('/', index);
+// app.use('/users', users);
+
+
 // app.use('/trails', trailsRouter);
 
 // catch 404 and forward to error handler
@@ -129,5 +133,6 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
+app.listen(process.env.PORT , 3000 );
 
 module.exports = app;
