@@ -21,7 +21,7 @@ var methodOverride = require('method-override');
 // Routes
 var homeRouter = require('./routes/index');
 var userRouter = require('./routes/users');
-
+var trailRouter = require('./routes/trails')
 
 var app = express();
 
@@ -57,6 +57,12 @@ app.use(flash());
 
 require('./config/passport/passport')(passport);
 
+// This middleware will allow us to use the currentUser in our views and routes.
+app.use(function (req, res, next) {
+ global.currentUser = req.user;
+ next();
+});
+
 // passport.use(new LocalStrategy(User.authenticate()));
 // passport.serializeUser(User.serializeUser());
 // passport.deserializeUser(User.deserializeUser());
@@ -66,6 +72,7 @@ require('./config/passport/passport')(passport);
 // Routes
 app.use('/', homeRouter);
 app.use('/users', userRouter);
+app.use('/trails', trailRouter);
 // app.post('/register', function(req, res) {
 // var newUser = new User({
 //     username: req.body.username

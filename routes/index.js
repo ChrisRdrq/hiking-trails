@@ -33,7 +33,7 @@ router.get('/signup', function(req, res) {
 router.post('/signup', function(req, res, next){
  //console.log('registering someone: ', req.body);
  var signUpStrategy = passport.authenticate('local-signup', {
-   successRedirect : '/lists',
+   successRedirect : '/secret',
    failureRedirect : '/signup',
    failureFlash : true
  });
@@ -61,13 +61,13 @@ router.post('/login', function(req, res, next) {
 // });
 // Restricted page
 router.get('/secret', function(req, res, next) {
-  res.render('secret');
- // if (currentUser) {
- //   res.render('secret.ejs');
- // }
- // else {
- //   res.redirect('/');
- // }
+//  res.render('secret');
+ if (currentUser) {
+   res.render('secret.ejs');
+ }
+ else {
+   res.redirect('/');
+ }
 });
 
 
