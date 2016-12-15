@@ -33,15 +33,73 @@ router.get('/', authenticate, function(req, res, next) {
   });
 });
 
-
-
 // NEW
 router.get('/new', authenticate, function(req, res, next) {
-  var todo = {
+  var trails = {
     title: '',
     completed: false
   };
   res.render('trails/new', { trails: trails } );
 });
+
+// SHOW
+router.get('/:id', authenticate, function(req, res, next) {
+  Trail.findById(req.params.id)
+  .then(function(trails) {
+    if (!trails) return next(makeError(res, 'Document not found', 404));
+    if (!trails.user.equals(currentUser.id)) return next(makeError(res, 'Nacho List!', 401));
+    res.render('trails/show', { trails: trails });
+  })
+  .catch(function(err) {
+    return next(err);
+  });
+});
+// CREATE
+router.post('/', authenticate, function(req, res, next) {
+  var trails = new Trails({
+    user:      currentUser,
+    title:     req.body.title,
+    completed: req.body.completed ? true : false
+  });
+  todo.save()
+  .then(function(saved) {
+    res.redirect('/trails');
+  })
+  .catch(function(err) {
+    return next(err);
+  });
+});
+
+// EDIT
+router.get('/:id/edit', authenticate, function(req, res, next) {
+  Trails.findById(req.params.id)
+  .then(function(trails) {
+    if (!trails) return next(makeError(res, 'Document not found', 404));
+    if (!trails.user.equals(currentUser.id)) return next(makeError(res, 'Nacho Todo!', 401));
+    res.render('trails/edit', { trails: trails });
+  })
+  .catch(function(err) {
+    return next(err);
+  });
+});
+
+// UPDATE
+router.put('/:id', authenticate, function(req, res, next) {
+  Trails.findById(req.params.id)
+  .then(function(trails) {
+    if (!todo) return next(makeError(res, 'Document not found', 404));
+    if (!todo.user.equals(currentUser.id)) return next(makeError(res, 'Nacho Todo!', 401));
+    trails.title = req.body.title;
+    trails.completed = req.body.completed ? true : false;
+    return trails.save();
+  })
+  .then(function(saved) {
+    res.redirect('/trails');
+  })
+  .catch(function(err) {
+    return next(err);
+  });
+});
+
 
 module.exports = router;

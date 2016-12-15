@@ -79,6 +79,14 @@ app.use('/trails', trailRouter);
 //   });
 // });
 
+
+// This middleware will allow us to use the currentUser in our views and routes.
+app.use(function (req, res, next) {
+  global.currentUser = req.user;
+  next();
+});
+
+
 // app.post('/register',function(req, res){
 //     req.body.username
 //     req.body.password
