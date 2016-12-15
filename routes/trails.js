@@ -43,3 +43,5 @@ router.get('/new', authenticate, function(req, res, next) {
   };
   res.render('trails/new', { trails: trails } );
 });
+
+module.exports = router;
