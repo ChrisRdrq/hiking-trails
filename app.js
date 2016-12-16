@@ -40,7 +40,21 @@ app.use(bodyParser.urlencoded({
 //     res.render('index');
 // });
 
-mongoose.connect('mongodb://localhost/trails');
+// Connect to database
+if (process.env.MONGODB_URI) {
+ mongoose.connect(process.env.MONGODB_URI);
+}
+else {
+ mongoose.connect('mongodb://localhost/trails');
+}
+mongoose.connection.on('error', function(err) {
+ console.error('MongoDB connection error: ' + err);
+ process.exit(-1);
+ }
+);
+mongoose.connection.once('open', function() {
+ console.log("Mongoose has connected to MongoDB!");
+});
 
 app.use(require("express-session")({
     secret: "Dogs are funny creatures",
