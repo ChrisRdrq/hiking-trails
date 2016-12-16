@@ -45,7 +45,7 @@ if (process.env.MONGODB_URI) {
  mongoose.connect(process.env.MONGODB_URI);
 }
 else {
- mongoose.connect('mongodb://localhost/trails');
+ mongoose.connect('mongodb://localhost/express-trails');
 }
 mongoose.connection.on('error', function(err) {
  console.error('MongoDB connection error: ' + err);
@@ -167,6 +167,6 @@ if (app.get('env') === 'development') {
 }
 
 
-app.listen(process.env.PORT , 3000 );
+// app.listen(process.env.PORT , 3000 );
 
 module.exports = app;
