@@ -1,5 +1,5 @@
 var mongoose = require('mongoose');
-var Todo = require('./models/todo');
+// var Todo = require('./models/todo');
 
 
 // Connect to database
