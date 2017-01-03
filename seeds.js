@@ -1,22 +1,10 @@
-var mongoose = require('mongoose');
-// var Todo = require('./models/todo');
+var mongoose     = require('mongoose');
+mongoose.Promise = require('bluebird');
+var bcrypt       = require('bcrypt-nodejs');
+var Todo         = require('./models/todo');
+var User         = require('./models/user');
 
-
-// Connect to database
-if (process.env.MONGODB_URI) {
- mongoose.connect(process.env.MONGODB_URI);
-}
-else {
- mongoose.connect('mongodb://localhost/trails');
-}
-mongoose.connection.on('error', function(err) {
- console.error('MongoDB connection error: ' + err);
- process.exit(-1);
- }
-);
-mongoose.connection.once('open', function() {
- console.log("Mongoose has connected to MongoDB!");
-});
+mongoose.connect('mongodb://localhost/trails');
 
 // our script will not exit until we have disconnected from the db.
 function quit() {
@@ -26,46 +14,56 @@ function quit() {
 
 // a simple error handler
 function handleError(err) {
-  console.log('ERROR:', err);
+  console.error('ERROR:', err);
   quit();
   return err;
 }
 
-console.log('removing old todos...');
+
+// create some User objects
+function getUsers() {
+  let hiker = new User({
+    local: {
+      email: 'chrisrdrq@aol.com',
+      password: bcrypt.hashSync('trees',  bcrypt.genSaltSync(8))
+    }
+  });
+  let hikim = new User({
+    local: {
+      email: 'test@test.com',
+      password: bcrypt.hashSync('dirt', bcrypt.genSaltSync(8))
+    }
+  });
+  return [hiker, dirt];
+}
+
+console.log('removing old trails...');
 Todo.remove({})
 .then(function() {
-  console.log('old todos removed');
-  console.log('creating some new todos...');
-  var groceries  = new Todo({ title: 'groceries',    completed: false });
-  var feedTheCat = new Todo({ title: 'feed the cat', completed: true  });
-  return Todo.create([groceries, feedTheCat]);
+  console.log('removing old users...');
+  return User.remove({});
 })
-.then(function(savedTodos) {
-  console.log('Just saved', savedTodos.length, 'todos.');
-  return Todo.find({});
+.then(function() {
+  return User.create(getUsers());
 })
-.then(function(allTodos) {
-  console.log('Printing all todos:');
-  allTodos.forEach(function(todo) {
-    console.log(todo);
-  });
-  return Todo.findOne({title: 'groceries'});
+.then(function(users) {
+  console.log('Saved users:', users);
+  console.log('creating some new trails...');
+
+  })
+.then(function(savedTrails) {
+  console.log('Just saved', savedTrails.length, 'trails.');
+  return trail.find({});
 })
-.then(function(groceries) {
-  groceries.completed = true;
-  return groceries.save();
-})
-.then(function(groceries) {
-  console.log('updated groceries:', groceries);
-  return groceries.remove();
-})
+
 .then(function(deleted) {
-  return Todo.find({});
+  return Trail.find({});
 })
 .then(function(allTodos) {
-  console.log('Printing all todos:');
-  allTodos.forEach(function(todo) {
-    console.log(todo);
+  console.log('Printing all trails:');
+  allTodos.forEach(function(trail) {
+    console.log(trail);
   });
   quit();
-});
+})
+.catch(handleError);

@@ -1,5 +1,5 @@
-var express = require('express');
-var router = express.Router();
+var express  = require('express');
+var router   = express.Router();
 var passport = require('passport');
 
 function isLoggedIn(req, res, next) {
@@ -19,17 +19,7 @@ router.get('/signup', function(req, res) {
     res.render('signup');
 });
 
-// POST /signup
-//router.post('/signup', function(req, res, next) {
 
-//   var signUpStrategy = passport.authenticate('local-signup', {
-//     successRedirect : '/',
-//     failureRedirect : '/login',
-//     failureFlash : true
-//   });
-//
-//   return signUpStrategy(req, res, next);
-// });
 router.post('/signup', function(req, res, next){
  //console.log('registering someone: ', req.body);
  var signUpStrategy = passport.authenticate('local-signup', {
@@ -42,8 +32,8 @@ router.post('/signup', function(req, res, next){
 
 
 //Login Routes
-router.get('/login', function(req, res) {
-    res.render('login');
+router.get('/login', function(req, res, next) {
+    res.render('login.ejs');
 });
 
 // POST /login
@@ -56,9 +46,13 @@ router.post('/login', function(req, res, next) {
   return loginProperty(req, res, next);
 });
 
-// router.get('/secret', isLoggedIn, function(res, req) {
-//     res.render('secret');
-// });
+// GET /logout
+router.get('/logout', function(req, res, next) {
+  req.logout();
+  res.redirect('/');
+});
+
+
 // Restricted page
 router.get('/secret', function(req, res, next) {
 //  res.render('secret');
@@ -77,11 +71,6 @@ router.get('/logout', function(req, res, next) {
   req.logout();
   res.redirect('/');
 });
-//middleware
-// router.post('login', passport.authenticate('local', {
-//     successRedirect: '/secret',
-//     failureRedirect: '/login'
-// }), function(req, res) {});
 
 
 module.exports = router;

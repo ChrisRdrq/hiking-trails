@@ -77,21 +77,11 @@ app.use(function (req, res, next) {
  next();
 });
 
-// passport.use(new LocalStrategy(User.authenticate()));
-// passport.serializeUser(User.serializeUser());
-// passport.deserializeUser(User.deserializeUser());
-// uncomment after placing your favicon in /public
-//app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
-
 // Routes
 app.use('/', homeRouter);
 app.use('/users', userRouter);
 app.use('/trails', trailRouter);
-// app.post('/register', function(req, res) {
-// var newUser = new User({
-//     username: req.body.username
-//   });
-// });
+
 
 
 // This middleware will allow us to use the currentUser in our views and routes.
@@ -100,44 +90,6 @@ app.use(function (req, res, next) {
   next();
 });
 
-
-// app.post('/register',function(req, res){
-//     req.body.username
-//     req.body.password
-//     User.register(new User({username: req.body.username}), req.body.password, function(err, user){
-//         if(err){
-//           return res.render('register');
-//         }
-//         passport.authenticate('local')(req, res, function(){
-//           res.redirect('/secret');
-//         });
-//     });
-// });
-// //Login Routes
-// app.get('/login', function(req, res) {
-//     res.render('login');
-// });
-// //middleware
-// app.post('login', passport.authenticate('local', {
-//     successRedirect: '/secret',
-//     failureRedirect: '/login'
-// }), function(req, res) {});
-
-// app.get('/logout', function(req, res) {
-//     req.logout();
-//     res.redirect('/');
-// });
-
-
-
-
-
-
-// app.use('/', index);
-// app.use('/users', users);
-
-
-// app.use('/trails', trailsRouter);
 
 // catch 404 and forward to error handler
 app.use(function(err,req, res, next) {
