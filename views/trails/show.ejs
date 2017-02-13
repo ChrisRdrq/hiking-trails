@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html>
   <head>
     <meta charset="utf-8">
@@ -9,4 +9,46 @@
 
 
   </body>
+</html> -->
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Show Page</title>
+  <% include ../partials/head %>
+
+</head>
+
+<body class="container-fluid">
+  <header>
+    <% include ../partials/header %>
+  </header>
+
+  <main>
+    <div>
+      <h3>SHOW</h3>
+      <p><b>Trail name: </b><%= trail.title %></p>
+      <p><b>ID: </b><%= trail._id %></p>
+
+      <p><b>Completed: </b>
+        <% if (trail.completed) { %>
+            <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+        <% } else { %>
+          <span class="glyphicon glyphicon-unchecked" aria-hidden="true"></span>
+        <% } %>
+      </p>
+
+      <p><b>Created: </b><%= trail.getCreatedAt() %></p>
+      <p><b>Last Updated: </b><%= trail.getUpdatedAt() %></p>
+    </div>
+
+    <a href="/trails" class="btn btn-primary">Back</a>
+    <a href="/trails/<%= trail._id %>/edit" class="btn btn-danger">Edit</a>
+  </main>
+
+  <footer>
+    <% include ../partials/footer %>
+  </footer>
+</body>
 </html>

@@ -1,12 +1,24 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <title></title>
-  </head>
-  <body>
-    <h1>Create trail</h1>
+<html lang="en">
+<head>
+  <% include ../partials/head %>
+</head>
 
+<header>
+  <% include ../partials/header %>
+</header>
 
-  </body>
+<main>
+  <h3>Create a Trail</h3>
+  <form class="trail-form" action="/trails" method="post">
+    <% include _form %>
+    <a href="/trails" class="btn btn-primary">Back</a>
+    <button type="submit" class="btn btn-success">Save</button>
+  </form>
+</main>
+
+<footer>
+  <% include ../partials/footer %>
+</footer>
+</body>
 </html>

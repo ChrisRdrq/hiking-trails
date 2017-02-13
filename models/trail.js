@@ -7,4 +7,8 @@ var TrailSchema = new mongoose.Schema({
 
 });
 
+
+
+
+
 module.exports = mongoose.model('Trail', TrailSchema);

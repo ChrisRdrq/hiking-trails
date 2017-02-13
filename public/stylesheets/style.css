@@ -1,6 +1,7 @@
 body {
   background-image: url("hikingpic.jpg");
-  padding: 50px;
+  background-size: cover;;
+  background-repeat: no-repeat;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 

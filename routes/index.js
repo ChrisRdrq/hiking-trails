@@ -19,11 +19,11 @@ router.get('/signup', function(req, res) {
     res.render('signup');
 });
 
-
+//POST signup
 router.post('/signup', function(req, res, next){
  //console.log('registering someone: ', req.body);
  var signUpStrategy = passport.authenticate('local-signup', {
-   successRedirect : '/secret',
+   successRedirect : '/trails',
    failureRedirect : '/signup',
    failureFlash : true
  });
@@ -65,12 +65,6 @@ router.get('/secret', function(req, res, next) {
 });
 
 
-
-// GET /logout
-router.get('/logout', function(req, res, next) {
-  req.logout();
-  res.redirect('/');
-});
 
 
 module.exports = router;

@@ -2,11 +2,45 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title></title>
+    <title>trails</title>
   </head>
   <body>
-    <h1>All trails</h1>
+    <body class="container-fluid">
+  <header>
+    <% include ../partials/header %>
+  </header>
 
+  <main>
+    <h1>All Trails</h1>
+    <form class="trail-form" action="/trails" method="post">
+      <% include _form %>
+      <a href="/trails" class="btn btn-primary">Back</a>
+      <button type="submit" class="btn btn-success" onclick="addItem()">Save</button>
+      <input type="button" id="add" value="Add New">
+<!-- <input type="submit" id="btnAdd" value="Create" onclick="addItem()"> -->
+  <!-- <div class="btn" onClick="addItem()"> Add Eelement </div> -->
+    </form>
+  </main>
 
-  </body>
+  <ul id="list_item">
+    <li id=""></li>
+
+  </ul>
+  <footer>
+    <% include ../partials/footer %>
+  </footer>
+
+  <script>
+
+  document.getElementById("add").onclick  = function() {
+
+      var node = document.createElement("Li");
+      var text = document.getElementById("list_item").value;
+      var textnode=document.createTextNode(text);
+      node.appendChild(textnode);
+      document.getElementById("list_item").appendChild(node);
+  }
+  </script>
+</body>
+</body>
 </html>
