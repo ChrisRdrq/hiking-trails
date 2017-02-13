@@ -26,7 +26,7 @@ router.get('/', authenticate, function(req, res, next) {
   // get all the todos and render the index view
   Trail.find({ user: currentUser }).sort('-createdAt')
   .then(function(trails) {
-    res.render('trails/index', { trails: trails } );
+    res.render('index/trails', { trails: trails } );
   })
   .catch(function(err) {
     return next(err);

@@ -15,17 +15,19 @@ router.get('/', function(req, res, next) {
   res.render('index', { title: "What's the best hiking trail?" });
 });
 
-router.get('/signup', function(req, res) {
+//GET /signup
+router.get('/signup', function(req, res, next) {
+    console.log ('This Working');
     res.render('signup');
 });
 
 //POST signup
 router.post('/signup', function(req, res, next){
- //console.log('registering someone: ', req.body);
+ // console.log('registering someone: ', req.body);
  var signUpStrategy = passport.authenticate('local-signup', {
    successRedirect : '/trails',
    failureRedirect : '/signup',
-   failureFlash : true
+    failureFlash : true
  });
  return signUpStrategy(req, res, next);
 });
@@ -33,7 +35,7 @@ router.post('/signup', function(req, res, next){
 
 //Login Routes
 router.get('/login', function(req, res, next) {
-    res.render('login.ejs');
+    res.render('login');
 });
 
 // POST /login
@@ -57,7 +59,7 @@ router.get('/logout', function(req, res, next) {
 router.get('/secret', function(req, res, next) {
 //  res.render('secret');
  if (currentUser) {
-   res.render('secret.ejs');
+   res.render('secret');
  }
  else {
    res.redirect('/');
