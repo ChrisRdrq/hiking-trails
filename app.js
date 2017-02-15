@@ -13,7 +13,7 @@ var passportLocalMongoose = ('passport-local-mongoose');
 var trails = require('./models/trail');
 var mongoose = require('mongoose');
 var User = require('./models/user');
-var session =require('express-session');
+var session =require('express-session')
     // var trailsRouter = require('./routes/trails');
 var methodOverride = require('method-override');
 
@@ -21,7 +21,7 @@ var methodOverride = require('method-override');
 // Routes
 var homeRouter = require('./routes/index');
 var userRouter = require('./routes/users');
-var trailRouter = require('./routes/trails');
+var trailRouter = require('./routes/trails')
 
 var app = express();
 
@@ -57,7 +57,7 @@ mongoose.connection.once('open', function() {
 });
 
 app.use(require("express-session")({
-    secret: "Hiking trails are awesome",
+    secret: "Dogs are funny creatures",
     resave: false,
     saveUninitialized: false
 }));
@@ -77,11 +77,21 @@ app.use(function (req, res, next) {
  next();
 });
 
+// passport.use(new LocalStrategy(User.authenticate()));
+// passport.serializeUser(User.serializeUser());
+// passport.deserializeUser(User.deserializeUser());
+// uncomment after placing your favicon in /public
+//app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
+
 // Routes
 app.use('/', homeRouter);
 app.use('/users', userRouter);
 app.use('/trails', trailRouter);
-
+// app.post('/register', function(req, res) {
+// var newUser = new User({
+//     username: req.body.username
+//   });
+// });
 
 
 // This middleware will allow us to use the currentUser in our views and routes.
@@ -91,14 +101,24 @@ app.use(function (req, res, next) {
 });
 
 
+
 // catch 404 and forward to error handler
 app.use(function(err,req, res, next) {
     var err = new Error('Not Found');
     err.status = 404;
     next(err);
 });
-
-
+// error handler
+// app.use(function(err, req, res, next) {
+//   // set locals, only providing error in development
+//   res.locals.message = err.message;
+//   res.locals.error = req.app.get('env') === 'development' ? err : {};
+//   // render the error page
+//   res.status(err.status || 500);
+//   res.render('error');
+// });
+// development error handler
+// will print stacktrace
 if (app.get('env') === 'development') {
  app.use(function(err, req, res, next) {
    res.status(err.status || 500);
@@ -108,6 +128,8 @@ if (app.get('env') === 'development') {
    });
  });
 }
+
+
 
 
 module.exports = app;
